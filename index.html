@@ -8,6 +8,13 @@
   <link type = "" rel="stylesheet" href="index.css">
 
 </head>
+<script>
+  if (sessionStorage.redirect) {
+    const redirect = sessionStorage.redirect;
+    delete sessionStorage.redirect;
+    history.replaceState(null, null, redirect);
+  }
+</script>
 <body>
   <header>
     <a href="./index.html"><h1>Escape From Wizard: Sun&Moon </h1></a>
