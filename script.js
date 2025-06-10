@@ -1,76 +1,96 @@
- // --- DOM 요소 선택 ---
-        const sliderContainer = document.querySelector('.slider-container');
-        const sliderWrapper = document.querySelector('.slider-wrapper');
-        const images = document.querySelectorAll('.slider-wrapper img');
-        const prevButton = document.querySelector('.prev-button');
-        const nextButton = document.querySelector('.next-button');
+// 슬라이더 관련
+const sliderContainer = document.querySelector('.slider-container');
+const sliderWrapper = document.querySelector('.slider-wrapper');
+const images = document.querySelectorAll('.slider-wrapper img');
+const prevButton = document.querySelector('.prev-button');
+const nextButton = document.querySelector('.next-button');
 
-        // --- 변수 설정 ---
-        let currentIndex = 0; // 현재 이미지 인덱스
-        const imageCount = images.length; // 전체 이미지 개수
-        const slideWidthPercentage = 100 / imageCount; // 각 이미지의 너비(%)
-        const slideIntervalTime = 3000; // 자동 슬라이드 간격 (3초)
-        let autoSlideInterval; // setInterval을 저장할 변수
+let currentIndex = 0;
+const imageCount = images.length;
+const slideWidthPercentage = 100 / imageCount;
+const slideIntervalTime = 3000;
+let autoSlideInterval;
 
-        // --- 함수 정의 ---
+function goToSlide(index) {
+  if (index < 0) currentIndex = imageCount - 1;
+  else if (index >= imageCount) currentIndex = 0;
+  else currentIndex = index;
+  sliderWrapper.style.transform = `translateX(-${currentIndex * slideWidthPercentage}%)`;
+}
 
-        // 지정된 인덱스로 슬라이드를 이동시키는 함수
-        function goToSlide(index) {
-            // 인덱스가 범위를 벗어날 경우 순환 처리
-            if (index < 0) {
-                currentIndex = imageCount - 1;
-            } else if (index >= imageCount) {
-                currentIndex = 0;
-            } else {
-                currentIndex = index;
-            }
-            // translateX를 이용해 wrapper를 왼쪽으로 이동
-            sliderWrapper.style.transform = `translateX(-${currentIndex * slideWidthPercentage}%)`;
-        }
+function nextSlide() { goToSlide(currentIndex + 1); }
+function prevSlide() { goToSlide(currentIndex - 1); }
 
-        // 다음 슬라이드로 이동
-        function nextSlide() {
-            goToSlide(currentIndex + 1);
-        }
+function startAutoSlide() {
+  clearInterval(autoSlideInterval);
+  autoSlideInterval = setInterval(nextSlide, slideIntervalTime);
+}
 
-        // 이전 슬라이드로 이동
-        function prevSlide() {
-            goToSlide(currentIndex - 1);
-        }
+function stopAutoSlide() {
+  clearInterval(autoSlideInterval);
+}
 
-        // 자동 슬라이드 시작
-        function startAutoSlide() {
-            // 이전에 실행되던 interval이 있다면 중지
-            clearInterval(autoSlideInterval); 
-            autoSlideInterval = setInterval(nextSlide, slideIntervalTime);
-        }
+// 라우트와 섹션 id 매핑
+const routes = {
+  '/intro': 'intro',
+  '/ppt': 'IDppt',
+  '/planning': 'IDplanning',
+  '/contact': 'contact'
+};
 
-        // 자동 슬라이드 중지
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
-        }
+// 네비게이션 클릭 이벤트
+document.addEventListener('click', (e) => {
+  if (e.target.matches('nav a')) {
+    e.preventDefault();
+    const path = e.target.getAttribute('href');
+    // 실제 라우팅
+    navigate(path);
+  }
+});
+
+// 뒤로/앞으로가기 처리
+window.addEventListener('popstate', () => {
+  navigate(window.location.pathname);
+});
+
+// 초기 로드 시 라우팅
+window.addEventListener('load', () => {
+  // GitHub Pages에서 SPA 라우팅을 위해 세션스토리지 사용
+  if (sessionStorage.redirect) {
+    const redirect = sessionStorage.redirect;
+    delete sessionStorage.redirect;
+    history.replaceState(null, null, redirect);
+  }
+  // 현재 경로로 라우팅
+  navigate(window.location.pathname);
+});
+
+// 라우팅 함수
+function navigate(path) {
+  // 경로가 없으면 /intro로 기본값
+  if (path === '/' || path === '') path = '/intro';
+  // 라우트 매핑에서 섹션 id 찾기
+  const routeId = routes[path] || routes['/intro'];
+  // 모든 섹션 숨기기
+ document.querySelectorAll('.content').forEach(section => {
+  section.classList.remove('active');
+});
+const targetSection = document.getElementById(routeId);
+if (targetSection) targetSection.classList.add('active');
+  // 히스토리 업데이트 (중복 방지)
+  if (window.location.pathname !== path) {
+    history.pushState({}, '', path);
+  }
+}
 
 
-        // --- 이벤트 리스너 설정 ---
+// 라우터 초기화
+new SPARouter();
 
-        // 다음 버튼 클릭 시
-        nextButton.addEventListener('click', () => {
-            stopAutoSlide(); // 수동 조작 시 자동 슬라이드 중지
-            nextSlide();
-        });
+// 슬라이더 이벤트
+nextButton.addEventListener('click', () => { stopAutoSlide(); nextSlide(); });
+prevButton.addEventListener('click', () => { stopAutoSlide(); prevSlide(); });
+sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+sliderContainer.addEventListener('mouseleave', startAutoSlide);
 
-        // 이전 버튼 클릭 시
-        prevButton.addEventListener('click', () => {
-            stopAutoSlide(); // 수동 조작 시 자동 슬라이드 중지
-            prevSlide();
-        });
-        
-        // 슬라이더에 마우스 올리면 자동 슬라이드 중지
-        sliderContainer.addEventListener('mouseenter', stopAutoSlide);
-
-        // 슬라이더에서 마우스 벗어나면 자동 슬라이드 다시 시작
-        sliderContainer.addEventListener('mouseleave', startAutoSlide);
-        
-
-        // --- 초기 실행 ---
-        startAutoSlide(); // 페이지 로드 시 자동 슬라이드 시작
+startAutoSlide();

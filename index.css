@@ -144,3 +144,14 @@ body {
       padding: 1rem;
       margin-top: 2rem;
     }
+
+    /* 모든 섹션 숨기기 */
+.content {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.content.active {
+  display: block;
+  opacity: 1;
+}
