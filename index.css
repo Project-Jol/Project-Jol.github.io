@@ -1,0 +1,146 @@
+body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #f9f9f9, #e6e6e6);
+      color: #333;
+    }
+
+    header {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+
+    header h1{
+
+
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header a{
+      text-decoration: none; /* 링크의 밑줄 제거 */ 
+      color: inherit; /* 링크의 색상 제거 */
+    }
+
+    nav {
+      text-align: center;
+      background-color: #444;
+      padding: 0.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: bold;
+    }
+
+    .slider-box{
+      padding: 50px;
+    }
+
+      /* 슬라이더의 보여질 프레임 */
+    .slider-container {
+     
+      margin: 0 auto;
+      width: 800px; /* 슬라이더의 너비 */
+      height: 370px; /* 슬라이더의 높이 */
+      overflow: hidden; /* 영역을 벗어나는 이미지는 숨김 처리 */
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+  /* 모든 이미지를 감싸는 컨테이너 */
+    .slider-wrapper {
+      display: flex;
+      /* 이미지 개수에 맞게 너비를 설정 (이미지 3개 -> 300%) */
+      width: 310%; 
+      height: 100%;
+      /* transform 속성이 변할 때 0.5초 동안 부드럽게 전환 */
+      transition: transform 0.5s ease-in-out;
+    }
+
+  /* 각 이미지 스타일 */
+    .slider-wrapper img {
+      /* 부모(.slider-wrapper) 너비의 1/3 만큼 차지 */
+      width: 33%; 
+      height: 100%;
+      object-fit: cover; /* 이미지가 잘리지 않고 채워지도록 설정 */
+    }
+
+    /* 화살표 버튼 공통 스타일 */
+        .prev-button, .next-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 10; /* 슬라이더 이미지 위에 표시되도록 설정 */
+            opacity: 0; /* 평소에는 투명하게 */
+            transition: opacity 0.3s ease, background-color 0.3s ease;
+            border-radius: 50%;
+        }
+        
+        /* 슬라이더 컨테이너에 마우스를 올렸을 때 버튼 표시 */
+        .slider-container:hover .prev-button,
+        .slider-container:hover .next-button {
+            opacity: 1;
+        }
+
+        .prev-button:hover, .next-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* 이전 버튼 위치 */
+        .prev-button {
+            left: 20px;
+        }
+
+        /* 다음 버튼 위치 */
+        .next-button {
+            right: 20px;
+        }
+
+
+    .hero {
+      background: url('https://images.unsplash.com/photo-1600464583798-40c39bc78c7c') no-repeat center center/cover;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      background-color: rgba(161, 161, 161, 0.493);
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    .content {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .content h3 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+
+    footer {
+      background-color: #222;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
